@@ -32,10 +32,7 @@ class FrontendController extends Controller
         $this->studlyName    = Str::studly($model);
         if($this->studlyName == 'About' || $this->studlyName == 'Contact'){
            $this->modelClass    = $this->frontend->getModel($this->studlyName . 'Us');
-        }else if($this->studlyName == 'Maincontact'){
-           $this->modelClass    =  $this->frontend->getModel('BasicContact');
         }else{
-          
            $this->modelClass    = $this->frontend->getModel($model == 'social'?'Soical': $this->studlyName);
         }
         $this->resourceClass =  "App\\Http\\Resources\\Api\\Admin\\{$this->studlyName}Resource";
@@ -48,8 +45,18 @@ class FrontendController extends Controller
                 return $this->error(__('main.no_model') , 404);
             }
             $this->PrepareModel($request->model);
+            $data = $this->frontend->getQuery($this->modelClass, $this->resourceClass, $request);
 
-            return  $this->success($this->frontend->getQuery($this->modelClass, $this->resourceClass, $request), __('main.retrieved_successfully', ['model' => $this->studlyName]));
+            if ($request->has('pagination') && $request->pagination > 0) {
+                return $this->successPaginated(
+                    $data['paginator'],
+                    $data['items'],
+                    'items',
+                    __('main.retrieved_successfully', ['model' => $this->studlyName])
+                );
+            }
+
+            return $this->success($data, __('main.retrieved_successfully', ['model' => $this->studlyName]));
 
         }catch(\Exception $e){
             return $this->error($e->getMessage() , 500);
@@ -69,7 +76,18 @@ class FrontendController extends Controller
     public function dynamicFilter(DynamicFilterRequest $request){
         try{
             $this->PrepareModel($request->model);
-            return  $this->success($this->frontend->dynamicFilter($this->modelClass, $this->resourceClass, $request), __('main.retrieved_successfully', ['model' => $this->studlyName]));           
+            $data = $this->frontend->dynamicFilter($this->modelClass, $this->resourceClass, $request);
+
+            if ($request->has('pagination') && $request->pagination > 0) {
+                return $this->successPaginated(
+                    $data['paginator'],
+                    $data['items'],
+                    'items',
+                    __('main.retrieved_successfully', ['model' => $this->studlyName])
+                );
+            }
+
+            return $this->success($data, __('main.retrieved_successfully', ['model' => $this->studlyName]));
 
         }catch(\Exception $e){
             return $this->error($e->getMessage() , 500);
@@ -81,17 +99,6 @@ class FrontendController extends Controller
 
     private function prepareGalleryModel($model){
         $this->studlyName    = Str::studly($model) . 'Gallery';
-        if(class_exists("App\\Models\\Api\\Admin\\{$this->studlyName}")){
-            $this->modelClass    = "App\\Models\\Api\\Admin\\{$this->studlyName}";
-            $this->forignKey     = Str::snake($model) . '_id';
-        }else{
-            throw new \Exception("Model {$this->studlyName} does not exist.");  
-        }
-        
-    }
-
-    private function prepareFileModel($model){
-        $this->studlyName    = Str::studly($model) . 'File';
         if(class_exists("App\\Models\\Api\\Admin\\{$this->studlyName}")){
             $this->modelClass    = "App\\Models\\Api\\Admin\\{$this->studlyName}";
             $this->forignKey     = Str::snake($model) . '_id';
@@ -124,35 +131,12 @@ class FrontendController extends Controller
 
 
 
-    public function getFile(Request $request){
-        try{
-            
-            if(!$request->has('model')){              
-                return $this->error(__('main.no_model') , 404);
-            }
-
-            if(!$request->has('id') || !is_numeric($request->id) ){              
-                return $this->error(__('main.no_id') , 404);
-            }
-
-            $this->prepareFileModel($request->model);
-
-            return  $this->success($this->frontend->getFiles($this->modelClass, $request->id , $this->forignKey ), __('main.retrieved_gallery_successfully', ['model' => $this->studlyName]));           
-
-        }catch(\Exception $e){
-            return $this->error($e->getMessage() , 500);
-        }
-        
-    }
-
-
-
-    public function search(Request $request){
+        public function search(Request $request){
         try{
             if(!$request->has('model')){              
                 return $this->error(__('main.no_model') , 404);
             }
-            if(!$request->has('value') || !$request->has('column')){              
+            if(!$request->has('value') || $request->has('column')){              
                 return $this->error(__('main.no_search') , 404);
             }
             $this->prepareModel($request->model);
@@ -165,12 +149,14 @@ class FrontendController extends Controller
         }catch(\Exception $e){
             return $this->error($e->getMessage() , 500);
         }
+    }// end search function  
 
-    } // end search function    
+
+
 
 
 
 
 
     
-} 
+}
