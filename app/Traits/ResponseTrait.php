@@ -34,4 +34,25 @@ trait ResponseTrait
         ],$code);
         
     }
+
+        public function successPaginated($paginator, $resourceCollection, string $key = 'items', string $message = 'Operation successful')
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => [
+                'items' => $resourceCollection,
+                'pagination' => [
+                    'total' => $paginator->total(),
+                    'per_page' => $paginator->perPage(),
+                    'current_page' => $paginator->currentPage(),
+                    'last_page' => $paginator->lastPage(),
+                ]
+            ],
+        ]);
+    }
+
+
+
+    
 }
