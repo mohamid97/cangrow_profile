@@ -1,0 +1,250 @@
+:root {
+    --bg-color: #1e1e1e;
+    --sidebar-bg: #252526;
+    --activity-bar-bg: #333333;
+    --status-bar-bg: #007acc;
+    --status-bar-text: #ffffff;
+    --tab-active-bg: #1e1e1e;
+    --tab-inactive-bg: #2d2d2d;
+    --tab-border: #252526;
+    --text-color: #cccccc;
+    --line-number: #858585;
+    --selection-bg: #264f78;
+    --scrollbar-bg: #424242;
+    --scrollbar-thumb: #4f4f4f;
+    
+    /* Syntax Highlighting */
+    --keyword: #569cd6;
+    --control: #c586c0;
+    --string: #ce9178;
+    --function: #dcdcaa;
+    --variable: #9cdcfe;
+    --comment: #6a9955;
+    --number: #b5cea8;
+    --class: #4ec9b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+/* Layout */
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Activity Bar */
+.activity-bar {
+    width: 48px;
+    background-color: var(--activity-bar-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.activity-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.activity-icon.active {
+    opacity: 1;
+    border-left: 2px solid white;
+}
+
+.activity-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: #858585;
+}
+
+.activity-icon.active svg {
+    fill: white;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 10px 20px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-tree {
+    padding: 0;
+    list-style: none;
+}
+
+.file-item {
+    padding: 3px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.file-item:hover {
+    background-color: #2a2d2e;
+}
+
+.file-item.active {
+    background-color: #37373d;
+}
+
+.folder-header {
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Editor Area */
+.editor-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+}
+
+.tabs-bar {
+    display: flex;
+    background-color: var(--sidebar-bg);
+    height: 35px;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    background-color: var(--tab-inactive-bg);
+    border-right: 1px solid var(--tab-border);
+    cursor: pointer;
+    min-width: 120px;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.tab.active {
+    background-color: var(--tab-active-bg);
+    color: white;
+    border-top: 1px solid var(--status-bar-bg); /* Highlight active tab */
+}
+
+.tab-close {
+    margin-left: 10px;
+    font-size: 14px;
+    opacity: 0;
+}
+
+.tab:hover .tab-close {
+    opacity: 1;
+}
+
+.breadcrumbs {
+    padding: 5px 15px;
+    font-size: 13px;
+    color: #858585;
+    display: flex;
+    gap: 5px;
+}
+
+.code-container {
+    flex: 1;
+    padding: 10px 0;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    line-height: 1.5;
+}
+
+.code-line {
+    display: flex;
+    padding: 0 5px;
+}
+
+.code-line:hover {
+    background-color: #2a2d2e; /* Subtle line highlight */
+}
+
+.line-number {
+    width: 50px;
+    text-align: right;
+    padding-right: 15px;
+    color: var(--line-number);
+    user-select: none;
+}
+
+.code-content {
+    white-space: pre;
+}
+
+/* Syntax Colors */
+.kwd { color: var(--keyword); }
+.str { color: var(--string); }
+.com { color: var(--comment); }
+.fun { color: var(--function); }
+.num { color: var(--number); }
+.cls { color: var(--class); }
+.var { color: var(--variable); }
+.ctl { color: var(--control); }
+
+/* Status Bar */
+.status-bar {
+    height: 22px;
+    background-color: var(--status-bar-bg);
+    color: var(--status-bar-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+.status-left, .status-right {
+    display: flex;
+    gap: 15px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.status-item:hover {
+    background-color: rgba(255,255,255,0.2);
+}
