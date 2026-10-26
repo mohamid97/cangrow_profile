@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 use App\Traits\HandlesImage;
 class CategoryResource extends JsonResource
 {
@@ -57,22 +57,8 @@ class CategoryResource extends JsonResource
                return $this->getColumnsLangWithArrayRelation(['title' , 'slug'] , 'services' , ['service_image']);
             }),
 
-            // make it cutsome to not return all data 
-            'deep_categories' => $this->whenLoaded('nestedCategories', function () {
-                return $this->nestedCategories->map(function ($child) {
-                    return [
-                        'id' => $child->id,
-                        'title' => $child->title,
-                        'slug' => $child->slug,
-                        'children' => $child->nestedCategories->map(function ($grandchild) {
-                            return [
-                                'id' => $grandchild->id,
-                                'title' => $grandchild->title,
-                                'slug' => $grandchild->slug,
-                            ];
-                        }),
-                    ];
-                });
+            'children' => $this->whenLoaded('nestedCategories', function () {
+                return $this->getDeepCategories($this->nestedCategories);
             }),
 
         ];
@@ -82,16 +68,15 @@ class CategoryResource extends JsonResource
 
     protected function getDeepCategories($categories)
     {
-        // need only two level of categories
-        $categories = $categories->take(2);
         return $categories->map(function ($category) {
             return [
                 'id' => $category->id,
                 'title' => $category->title,
                 'slug' => $category->slug,
-                'children' => $category->nestedCategories->isNotEmpty() 
+                'children' => $category->nestedCategories->isNotEmpty()
                     ? $this->getDeepCategories($category->nestedCategories)
-                    : []
+                    : [],
+                'category_image' => $this->getImageUrl($category->category_image),
             ];
         });
     }

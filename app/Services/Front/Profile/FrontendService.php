@@ -21,22 +21,20 @@ class FrontendService
 
     public function getQuery($modelClass, $resourceClass, $request)
     {
+        $relations = $this->requestedRelations($request);
 
-        if ($request->has('relations') && is_array($request->relations)) {
+        if ($relations !== []) {
+            foreach ($relations as $relation) {
+                $rootRelation = explode('.', $relation)[0];
 
-            // need to ckeck if model has this relations
-            foreach ($request->relations as $relation) {
-                if (! method_exists($modelClass, $relation)) {
+                if (! method_exists($modelClass, $rootRelation)) {
                     throw new \Exception("Relation {$relation} does not exist in model.");
                 }
             }
 
-            $query = $modelClass::with($request->relations);
-
+            $query = $modelClass::with($relations);
         } else {
-
             $query = $modelClass::query();
-
         }
 
         // `filter` uses the same payload shape as /data/dynamic/filter:
@@ -101,33 +99,50 @@ class FrontendService
     private function createResponseItem($query, $resourceClass, $request)
     {
         $items = $resourceClass::collection($query);
-        $requestedColumns = $request->input('column');
+        $requestedColumns = $this->requestedNames($request->input('column', $request->input('columns', [])));
 
-        if (is_string($requestedColumns)) {
-            $requestedColumns = [$requestedColumns];
-        }
-
-        if (! is_array($requestedColumns) || empty($requestedColumns)) {
+        if ($requestedColumns === []) {
             $this->reponseData['items'] = $items;
 
             return;
         }
 
-        // Relations are explicitly requested data, so `columns` must not remove
-        // them from the transformed response. For nested eager loads such as
-        // `brands.translations`, the response key is the root relation (`brands`).
         $responseKeys = array_unique(array_merge(
             $requestedColumns,
-            collect($request->input('relations', []))
-                ->filter(fn ($relation) => is_string($relation))
-                ->map(fn ($relation) => explode('.', $relation)[0])
-                ->all()
+            array_map(
+                fn ($relation) => match (explode('.', $relation)[0]) {
+                    'nestedCategories' => 'children',
+                    default => explode('.', $relation)[0],
+                },
+                $this->requestedRelations($request)
+            )
         ));
 
         $this->reponseData['items'] = collect($items->resolve($request))
             ->map(fn ($item) => collect($item)->only($responseKeys)->all())
             ->values()
             ->all();
+    }
+
+    private function requestedRelations($request): array
+    {
+        return $this->requestedNames($request->input('relations', $request->input('relation', [])));
+    }
+
+    private function requestedNames($value): array
+    {
+        if (is_string($value)) {
+            $value = [$value];
+        }
+
+        if (! is_array($value)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_filter(
+            $value,
+            fn ($name) => is_string($name) && trim($name) !== ''
+        )));
     }
 
     // start dynamic  filter

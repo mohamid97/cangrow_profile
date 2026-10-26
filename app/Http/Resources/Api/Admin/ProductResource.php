@@ -4,7 +4,9 @@ namespace App\Http\Resources\Api\Admin;
 
 use App\Traits\HandlesImage;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
+use App\Http\Resources\Api\Front\File\FileREsource;
+use App\Http\Resources\Api\Front\Gallery\GalleryResource;
 
 class ProductResource extends JsonResource
 {
@@ -40,6 +42,8 @@ class ProductResource extends JsonResource
                     'slug'=>$this->getColumnLang('slug','brand'),
                 ];
         }),
+        'gallery' => $this->whenLoaded('gallery', fn () => GalleryResource::collection($this->gallery)),
+        'file' => $this->whenLoaded('file', fn () => FileREsource::collection($this->file)),
         'order' => $this->order,
         'small_des' => $this->getColumnLang('small_des'),
         'des' => $this->getColumnLang('des'),

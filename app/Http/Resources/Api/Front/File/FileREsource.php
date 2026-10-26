@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api\Front\File;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 use App\Traits\HandlesImage;
 
 class FileREsource extends JsonResource

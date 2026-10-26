@@ -4,7 +4,7 @@ namespace App\Http\Resources\Api\Admin;
 
 use App\Models\Api\Admin\Category;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 use App\Traits\HandlesImage;
 
 class BlogResource extends JsonResource
