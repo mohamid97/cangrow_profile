@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\Admin;
 
+use App\Models\Api\Admin\Lang;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Traits\HandlesImage;
