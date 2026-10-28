@@ -83,7 +83,7 @@ class CategoryResource extends JsonResource
             return [
                 'id' => $category->id,
                 'title' => $category->title,
-                'slug' => $category->slug,
+                'slug' => $this->slugTranslation($category),
                 'children' => $category->nestedCategories->isNotEmpty() 
                     ? $this->getDeepCategories($category->nestedCategories)
                     : [],
