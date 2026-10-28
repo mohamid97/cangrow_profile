@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 
 class UserResource extends JsonResource
 {

@@ -5,7 +5,7 @@ namespace App\Http\Resources\Api\Admin;
 use App\Models\Api\Admin\BasicContact;
 use App\Models\Api\Admin\Location;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 use App\Traits\HandlesImage;
 
 class ContactResource extends JsonResource

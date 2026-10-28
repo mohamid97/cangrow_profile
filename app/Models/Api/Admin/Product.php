@@ -32,6 +32,16 @@ class Product extends Model implements TranslatableContract
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
+    public function gallery()
+    {
+        return $this->hasMany(ProductGallery::class, 'product_id')->orderBy('order');
+    }
+
+    public function file()
+    {
+        return $this->hasMany(ProductFile::class, 'product_id')->orderBy('order');
+    }
+
 
 
 }

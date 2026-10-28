@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api\Front\Memeber;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\JsonResource;
 
 class MemeberResource extends JsonResource
 {
