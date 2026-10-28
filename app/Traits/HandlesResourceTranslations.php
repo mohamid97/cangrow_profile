@@ -12,6 +12,15 @@ trait HandlesResourceTranslations
 
         if (!empty($columnLangs)) {
             if (!empty($relation)) {
+                if ($field === 'slug') {
+                    $translations = [];
+
+                    foreach (Lang::all() as $locale) {
+                        $translations[$locale->code] =$this->$relation?->translate($locale->code)?->$field ?? null;
+                    }
+
+                    return $translations;
+                }
                 return $this->$relation?->translate($columnLangs)?->$field ?? null;
             }
 
