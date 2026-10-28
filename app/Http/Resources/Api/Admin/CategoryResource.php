@@ -3,8 +3,7 @@
 namespace App\Http\Resources\Api\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\JsonResource;
-use App\Models\Api\Admin\Lang;
+use Illuminate\Http\Resources\Json\JsonResource;
 use App\Traits\HandlesImage;
 class CategoryResource extends JsonResource
 {
@@ -84,8 +83,8 @@ class CategoryResource extends JsonResource
             return [
                 'id' => $category->id,
                 'title' => $category->title,
-                'slug' => $this->slugTranslation($category),
-                'children' => $category->nestedCategories->isNotEmpty()
+                'slug' => $category->slug,
+                'children' => $category->nestedCategories->isNotEmpty() 
                     ? $this->getDeepCategories($category->nestedCategories)
                     : [],
                 'category_image' => $this->getImageUrl($category->category_image),
