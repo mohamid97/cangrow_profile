@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\JsonResource;
+use App\Models\Api\Admin\Lang;
 use App\Traits\HandlesImage;
 class CategoryResource extends JsonResource
 {
@@ -65,6 +66,17 @@ class CategoryResource extends JsonResource
 
     }
 
+    protected function slugTranslation($category)
+    {
+        $translations = [];
+
+        foreach (Lang::all() as $locale) {
+            $translations[$locale->code] = $category->translate($locale->code)?->slug ?? null;
+        }
+
+        return $translations;
+    }
+
 
     protected function getDeepCategories($categories)
     {
@@ -72,7 +84,8 @@ class CategoryResource extends JsonResource
             return [
                 'id' => $category->id,
                 'title' => $category->title,
-                'slug' => $category->slug,
+                // need to return  with all langues 
+                'slug' => $this->slugTranslation($category),
                 'children' => $category->nestedCategories->isNotEmpty()
                     ? $this->getDeepCategories($category->nestedCategories)
                     : [],
