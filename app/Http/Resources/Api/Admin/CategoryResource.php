@@ -26,7 +26,11 @@ class CategoryResource extends JsonResource
             'meta_title' => $this->getColumnLang('meta_title'),
             'type' => $this->type,
             'parent' => $this->whenLoaded('parent', function () {
-                return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id' ,'category_image'] , 'parent' );
+                return $this->parent ? [
+                    'id' => $this->parent->id,
+                    'title' => $this->getColumnLang('title' , 'parent'),
+                    'slug' =>  $this->getColumnLang('slug' , 'parent')
+                ] : null;
             }),
             'childrens' => $this->whenLoaded('childrens', function () {
                   return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id' ,'category_image'] , 'childrens');
