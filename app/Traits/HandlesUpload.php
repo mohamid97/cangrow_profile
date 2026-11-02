@@ -15,10 +15,20 @@ trait HandlesUpload
         if (!$file || !$file->isValid()) {
             return null;
         }
-         // need to save file with its name uploaded
-            $filename = $file->getClientOriginalName();
 
-            return $file->storeAs($directory, $filename, $disk);
+        // Get the original file name provided by the user
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        
+        // Get the file extension
+        $extension = $file->getClientOriginalExtension();
+
+        // Generate a random 4-digit number
+        $randomNum = rand(1000, 9999);
+
+        // Combine the original name, random number, and extension: original-name-1234.ext
+        $filename = "{$originalName}-{$randomNum}.{$extension}";
+
+        return $file->storeAs($directory, $filename, $disk);
     }
 
     /**
