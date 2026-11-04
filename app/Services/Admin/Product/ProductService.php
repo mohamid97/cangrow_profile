@@ -27,7 +27,7 @@ class ProductService extends BaseModelService
       
         $this->uploadSingleImage(['product_image', 'breadcrumb'], 'uploads/products');
         $this->data['slug']  = $this->createSlug($this->data); 
-        $product = parent::store($this->getBasicColumn(['product_image', 'status','barcode','breadcrumb' , 'order'  , 'price'  , 'category_id']));
+        $product = parent::store($this->getBasicColumn(['product_image', 'status','barcode','breadcrumb' , 'order'  , 'price'  , 'category_id', 'sale']));
         $this->processTranslations($product, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);  
         return $product;
         
@@ -37,7 +37,7 @@ class ProductService extends BaseModelService
 
     public function update($id ){
         $this->uploadSingleImage(['product_image', 'breadcrumb'], 'uploads/products');
-        $product = parent::update($id , $this->getBasicColumn(['status','product_image','barcode' ,'breadcrumb' , 'order' , 'price'  , 'category_id']));
+        $product = parent::update($id , $this->getBasicColumn(['status','product_image','barcode' ,'breadcrumb' , 'order' , 'price'  , 'category_id', 'sale']));
         $this->processTranslations($product, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);
         return $product;
         

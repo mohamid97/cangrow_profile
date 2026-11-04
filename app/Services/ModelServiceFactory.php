@@ -25,6 +25,7 @@ class ModelServiceFactory
         'achivement'=>\App\Services\Admin\Achivement\AchivementService::class,
         'service'=>\App\Services\Admin\Service\ServiceService::class,
         'product'=>\App\Services\Admin\Product\ProductService::class,
+        'video'=>\App\Services\Admin\Video\VideoService::class,
         'branch'=>\App\Services\Admin\Branch\BranchService::class,
         'setting'=>\App\Services\Admin\Setting\SettingService::class,
         'metasetting'=>\App\Services\Admin\Metasetting\MetasettingService::class,

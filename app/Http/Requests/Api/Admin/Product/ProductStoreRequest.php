@@ -41,7 +41,8 @@ class ProductStoreRequest extends FormRequest
             'meta_title.*' => 'nullable|max:255',
             'meta_des.*' => 'nullable|max:255',
             'barcode'=>'nullable|string|max:255',
-            'status'=>'required|in:published,pending'
+            'status'=>'required|in:published,pending',
+            'sale'=>'sometimes|boolean'
         ];
     }
 

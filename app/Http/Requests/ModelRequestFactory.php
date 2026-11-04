@@ -35,6 +35,8 @@ use App\Http\Requests\Api\Admin\Ourwork\OurworkStoreRequest;
 use App\Http\Requests\Api\Admin\Ourwork\OurworkUpdateRequest;
 use App\Http\Requests\Api\Admin\Product\ProductStoreRequest;
 use App\Http\Requests\Api\Admin\Product\ProductUpdateRequest;
+use App\Http\Requests\Api\Admin\Video\VideoStoreRequest;
+use App\Http\Requests\Api\Admin\Video\VideoUpdateRequest;
 use App\Http\Requests\Api\Admin\Role\RoleStoreRequest;
 use App\Http\Requests\Api\Admin\Role\RoleUpdateRequest;
 use App\Http\Requests\Api\Admin\Service\ServiceStoreRequest;
@@ -135,6 +137,10 @@ class ModelRequestFactory
                 'store'=>ProductStoreRequest::class,
                 'update'=>ProductUpdateRequest::class
             ],
+            'video'=>[
+                'store'=>VideoStoreRequest::class,
+                'update'=>VideoUpdateRequest::class
+            ],
             'branch'=>[
                 'store'  =>  BranchStoreRequest::class,
                 'update' => BranchUpdateRequest::class
@@ -194,10 +200,9 @@ class ModelRequestFactory
     
         $validator = Validator::make($request->all(), $requestClass->rules());
         
-        // if ($validator->fails()) {
-            
-        //     throw new ValidationException($validator);
-        // }
+        if ($model === 'video' && $validator->fails()) {
+            throw new ValidationException($validator);
+        }
 
         
         

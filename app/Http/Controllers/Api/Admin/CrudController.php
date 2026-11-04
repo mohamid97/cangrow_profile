@@ -10,6 +10,7 @@ use App\Services\Admin\Gallery\GalleryService;
 use App\Services\Admin\Specification\SpecificationService;
 use App\Services\Admin\File\FileService;
 use App\Services\ModelServiceFactory;
+use App\Models\Api\Admin\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -119,6 +120,24 @@ class CrudController extends Controller
 
 
     }
+
+    public function updateProductSale(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|integer|exists:products,id',
+            'sale' => 'required|boolean',
+        ]);
+
+        $product = Product::findOrFail($validated['id']);
+        $product->sale = $validated['sale'];
+        $product->save();
+
+        return $this->success([
+            'id' => $product->id,
+            'sale' => $product->sale,
+        ], 'Product sale status updated successfully');
+    }
+
 
     public function delete(Request $request)
     {

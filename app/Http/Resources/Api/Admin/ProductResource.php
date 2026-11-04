@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\JsonResource;
 use App\Http\Resources\Api\Front\File\FileREsource;
 use App\Http\Resources\Api\Front\Gallery\GalleryResource;
+use App\Http\Resources\Api\Admin\VideoResource;
 
 class ProductResource extends JsonResource
 {
@@ -44,6 +45,7 @@ class ProductResource extends JsonResource
         }),
         'gallery' => $this->whenLoaded('gallery', fn () => GalleryResource::collection($this->gallery)),
         'file' => $this->whenLoaded('file', fn () => FileREsource::collection($this->file)),
+        'video' => $this->whenLoaded('video', fn () => VideoResource::collection($this->video)),
         'order' => $this->order,
         'small_des' => $this->getColumnLang('small_des'),
         'des' => $this->getColumnLang('des'),
@@ -55,6 +57,7 @@ class ProductResource extends JsonResource
         'meta_des' => $this->getColumnLang('meta_des'),
         // 'order'=>$this->order,
         'barcode'=>$this->barcode,
+        'sale' => (bool) $this->sale,
         'status'=>$this->status,
         'created_at' => $this->created_at?->format('Y-m-d'),
         'updated_at' => $this->updated_at?->format('Y-m-d'),

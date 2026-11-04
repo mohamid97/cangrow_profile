@@ -10,7 +10,10 @@ use Astrotomic\Translatable\Translatable;
 class Product extends Model implements TranslatableContract
 {
     use HasFactory,Translatable;
-    protected $fillable = ['product_image','barcode' , 'status','breadcrumb' , 'order' , 'price'  , 'brand_id','category_id'];
+    protected $fillable = ['product_image','barcode' , 'status','breadcrumb' , 'order' , 'price'  , 'brand_id','category_id', 'sale'];
+    protected $casts = [
+        'sale' => 'boolean',
+    ];
     public $translatedAttributes = ['title' , 'slug' , 'small_des' ,'des' , 'meta_title' , 'meta_des' , 'alt_image', 'title_image'];
     public $translationForeignKey = 'product_id';
     public $translationModel = 'App\Models\Api\Admin\ProductTranslation';
@@ -40,6 +43,11 @@ class Product extends Model implements TranslatableContract
     public function file()
     {
         return $this->hasMany(ProductFile::class, 'product_id')->orderBy('order');
+    }
+
+    public function video()
+    {
+        return $this->hasMany(Video::class, 'product_id');
     }
 
 
