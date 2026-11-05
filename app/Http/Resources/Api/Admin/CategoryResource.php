@@ -36,7 +36,7 @@ class CategoryResource extends JsonResource
                   return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id' ,'category_image'] , 'childrens');
             }),
             'products' => $this->whenLoaded('products', function () {
-                return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id' ,'product_image'] , 'products');
+                return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id'] , 'products' ,['product_image']);
             }),
             'meta_des' => $this->getColumnLang('meta_des'),
             'category_image' => $this->getImageUrl($this->category_image),
