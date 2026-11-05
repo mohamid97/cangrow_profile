@@ -33,7 +33,7 @@ class CategoryResource extends JsonResource
                 ] : null;
             }),
             'childrens' => $this->whenLoaded('childrens', function () {
-                  return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id' ,'category_image'] , 'childrens');
+                  return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id'] , 'childrens',['category_image']);
             }),
             'products' => $this->whenLoaded('products', function () {
                 return $this->getColumnsLangWithArrayRelation(['title' , 'slug' , 'id'] , 'products' ,['product_image']);
