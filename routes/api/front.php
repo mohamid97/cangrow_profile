@@ -26,7 +26,9 @@ Route::prefix('v1')->middleware('ckeckLang')->group(function () {
 
 
     // dynamic endpoint to get profile data
-    Route::prefix('data')->controller('FrontendController')->group(function () {
+    Route::prefix('data')->controller('FrontendController')->middleware(
+        \App\Http\Middleware\Api\Front\PreventSensitiveModelAccess::class
+    )->group(function () {
         Route::post('get', 'get');
         Route::post('dynamic/filter', 'dynamicFilter');
         Route::post('gallery', 'getGallery');
@@ -34,7 +36,6 @@ Route::prefix('v1')->middleware('ckeckLang')->group(function () {
 
         Route::post('search', 'search');
     });
-
     Route::prefix('applicant')->controller('ApplicantController')->group(function () {
         Route::post('store', 'store');
 

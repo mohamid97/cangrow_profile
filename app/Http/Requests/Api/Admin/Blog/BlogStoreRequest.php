@@ -27,6 +27,7 @@ class BlogStoreRequest extends FormRequest
     {
         return [
             'category_id' => 'nullable|integer|exists:categories,id',
+            'author_box_id' => 'nullable|integer|exists:authorboxes,id',
             'blog_image' => 'nullable|image|mimes:jpeg,webp,png,jpg,gif,svg|max:2048',
             'breadcrumb' => 'nullable|image|mimes:jpeg,png,webp,jpg,gif,svg|max:2048',
             'meta_title.*' => 'nullable|string|max:255',
@@ -41,6 +42,11 @@ class BlogStoreRequest extends FormRequest
             'small_des.*' => 'nullable|string|max:255',
             'des' => 'nullable|array',
             'des.*' => 'nullable|string|max:5000',
+            'faqs' => 'prohibited',
+            'faqs_ids' => 'sometimes|array',
+            'faqs_ids.*' => 'integer|distinct|exists:faqs,id',
+            'related_blogs' => 'sometimes|array',
+            'related_blogs.*' => 'integer|distinct|exists:blogs,id',
         ];
         
     }

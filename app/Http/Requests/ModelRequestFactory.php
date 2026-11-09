@@ -174,6 +174,14 @@ class ModelRequestFactory
                 'store' => \App\Http\Requests\Api\Admin\Des\DesStoreRequest::class,
                 'update' => \App\Http\Requests\Api\Admin\Des\DesUpdateRequest::class,
             ],
+            'redirect'=>[
+                'store' => \App\Http\Requests\Api\Admin\Redirect\RedirectStoreRequest::class,
+                'update' => \App\Http\Requests\Api\Admin\Redirect\RedirectUpdateRequest::class,
+            ],
+            'authorbox'=>[
+                'store' => \App\Http\Requests\Api\Admin\Authorbox\AuthorboxStoreRequest::class,
+                'update' => \App\Http\Requests\Api\Admin\Authorbox\AuthorboxUpdateRequest::class,
+            ],
             
 
         ];
@@ -193,13 +201,21 @@ class ModelRequestFactory
         $requestClass = app($map[$model][$action]);
     
         $validator = Validator::make($request->all(), $requestClass->rules());
-        
-        // if ($validator->fails()) {
-            
-        //     throw new ValidationException($validator);
-        // }
-
-        
-        
+        if (in_array($model, ['redirect', 'authorbox', 'faq'], true)) {
+            $validator->validate();
+        }
+        if ($model === 'blog') {
+            $blogRelationRules = array_filter(
+                $requestClass->rules(),
+                fn (string $key): bool => $key === 'author_box_id'
+                    || $key === 'related_blogs'
+                    || str_starts_with($key, 'related_blogs.')
+                    || $key === 'faqs'
+                    || $key === 'faqs_ids'
+                    || str_starts_with($key, 'faqs_ids.'),
+                ARRAY_FILTER_USE_KEY
+            );
+            Validator::make($request->all(), $blogRelationRules)->validate();
+        }
     }
 }

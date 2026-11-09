@@ -38,6 +38,8 @@ class ModelServiceFactory
         'certificate'=> \App\Services\Admin\Certificate\CertificateService::class,
         'page'=> \App\Services\Admin\Page\PageService::class,
         'des'=> \App\Services\Admin\Des\DesService::class,
+        'redirect'=> \App\Services\Admin\Redirect\RedirectService::class,
+        'authorbox'=> \App\Services\Admin\Authorbox\AuthorboxService::class,
       
     ];
 
