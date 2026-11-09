@@ -42,6 +42,15 @@ class ProductResource extends JsonResource
                     'slug'=>$this->getColumnLang('slug','brand'),
                 ];
         }),
+        'applications' => $this->whenLoaded('applications', function () {
+                return $this->applications->map(function ($application) {
+                    return [
+                        'id' => $application->id,
+                        'title' => $application->title,
+                        'image' => $this->getImageUrl($application->image),
+                    ];
+                });
+            }),
         'gallery' => $this->whenLoaded('gallery', fn () => GalleryResource::collection($this->gallery)),
         'file' => $this->whenLoaded('file', fn () => FileREsource::collection($this->file)),
         'order' => $this->order,

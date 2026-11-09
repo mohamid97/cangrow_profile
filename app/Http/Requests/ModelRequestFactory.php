@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Api\Admin\About\AboutStoreRequest;
 use App\Http\Requests\Api\Admin\About\AboutUpdateRequest;
+use App\Http\Requests\Api\Admin\Application\ApplicationStoreRequest;
+use App\Http\Requests\Api\Admin\Application\ApplicationUpdateRequest;
 use App\Http\Requests\Api\Admin\Achivement\AchivementStoreRequest;
 use App\Http\Requests\Api\Admin\Achivement\AchivementUpdateRequest;
 use App\Http\Requests\Api\Admin\Blog\BlogStoreRequest;
@@ -135,6 +137,10 @@ class ModelRequestFactory
                 'store'=>ProductStoreRequest::class,
                 'update'=>ProductUpdateRequest::class
             ],
+            'application'=>[
+                'store'=> ApplicationStoreRequest::class,
+                'update'=> ApplicationUpdateRequest::class
+            ],
             'branch'=>[
                 'store'  =>  BranchStoreRequest::class,
                 'update' => BranchUpdateRequest::class
@@ -193,13 +199,9 @@ class ModelRequestFactory
         $requestClass = app($map[$model][$action]);
     
         $validator = Validator::make($request->all(), $requestClass->rules());
-        
-        // if ($validator->fails()) {
-            
-        //     throw new ValidationException($validator);
-        // }
-
-        
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
         
     }
 }

@@ -42,6 +42,11 @@ class Product extends Model implements TranslatableContract
         return $this->hasMany(ProductFile::class, 'product_id')->orderBy('order');
     }
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'product_id');
+    }
+
 
 
 }
