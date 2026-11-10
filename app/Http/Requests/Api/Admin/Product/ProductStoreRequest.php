@@ -28,7 +28,8 @@ class ProductStoreRequest extends FormRequest
         return [
             'price'=>'nullable|numeric',
             'category_id'=>'nullable|exists:categories,id',
-            'brand_id'=>'nullable|exists:brands,id',
+            'brand_ids'=>'nullable|array',
+            'brand_ids.*'=>'integer|distinct|exists:brands,id',
             'order'=>'nullable|integer|unique:service,order',
             'images'=>'nullable|array',
             'images.*'=>'nullable|image|mimes:jpeg,png,webp,jpg,gif|max:5000',

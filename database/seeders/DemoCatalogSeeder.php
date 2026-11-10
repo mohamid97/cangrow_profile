@@ -256,7 +256,6 @@ class DemoCatalogSeeder extends Seeder
                         'breadcrumb' => null,
                         'price' => $productData['price'],
                         'category_id' => $categoryIds[$productData['category']],
-                        'brand_id' => null,
                         'order' => 1,
                         'barcode' => $productData['barcode'],
                         'status' => 'published',

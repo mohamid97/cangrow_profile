@@ -35,22 +35,8 @@ class ProductResource extends JsonResource
                 ];
         }),
 
-        'brand' => $this->whenLoaded('brand' , function(){
-                return [
-                    'id'=>$this->brand ? $this->brand->id : null,
-                    'title'=>$this->getColumnLang('title','brand'),
-                    'slug'=>$this->getColumnLang('slug','brand'),
-                ];
-        }),
-        'applications' => $this->whenLoaded('applications', function () {
-                return $this->applications->map(function ($application) {
-                    return [
-                        'id' => $application->id,
-                        'title' => $application->title,
-                        'image' => $this->getImageUrl($application->image),
-                    ];
-                });
-            }),
+        'brands' => $this->whenLoaded('brands', fn () => $this->getColumnsLangWithArrayRelation(['title', 'slug'], 'brands' , ['image'])),
+        'applications' => $this->whenLoaded('applications', fn () => $this->getColumnsLangWithArrayRelation(['title', 'slug'], 'applications' , ['image'])),
         'gallery' => $this->whenLoaded('gallery', fn () => GalleryResource::collection($this->gallery)),
         'file' => $this->whenLoaded('file', fn () => FileREsource::collection($this->file)),
         'order' => $this->order,

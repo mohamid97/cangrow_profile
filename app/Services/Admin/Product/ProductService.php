@@ -10,7 +10,7 @@ class ProductService extends BaseModelService
 {
     use StoreMultiLang , HandlesImage;
     protected string $modelClass = Product::class;
-    protected array $relations = ['category' , 'brand'];
+    protected array $relations = ['category', 'brands'];
 
     public function all($request){
         $product = parent::all($request);
@@ -28,8 +28,9 @@ class ProductService extends BaseModelService
         $this->uploadSingleImage(['product_image', 'breadcrumb'], 'uploads/products');
         $this->data['slug']  = $this->createSlug($this->data); 
         $product = parent::store($this->getBasicColumn(['product_image', 'status','barcode','breadcrumb' , 'order'  , 'price'  , 'category_id']));
+        $this->syncBrands($product);
         $this->processTranslations($product, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);  
-        return $product;
+        return $product->load($this->relations);
         
     }
     
@@ -38,9 +39,17 @@ class ProductService extends BaseModelService
     public function update($id ){
         $this->uploadSingleImage(['product_image', 'breadcrumb'], 'uploads/products');
         $product = parent::update($id , $this->getBasicColumn(['status','product_image','barcode' ,'breadcrumb' , 'order' , 'price'  , 'category_id']));
+        $this->syncBrands($product);
         $this->processTranslations($product, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);
-        return $product;
+        return $product->load($this->relations);
         
+    }
+
+    private function syncBrands(Product $product): void
+    {
+        if (array_key_exists('brand_ids', $this->data)) {
+            $product->brands()->sync($this->data['brand_ids'] ?? []);
+        }
     }
 
     public function delete($id){
