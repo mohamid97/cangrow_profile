@@ -30,7 +30,9 @@ class FaqUpdateRequest extends FormRequest
             'answer'=>'required|array',
             'answer.*'=>'required|string|max:5000',
             'icon'=>'nullable|image|mimes:png,jpg,webp|max:3000',
-            'topic'=>'nullable|string|max:255'
+            'topic'=>'nullable|string|max:255',
+            'blog_ids'=>'nullable|array',
+            'blog_ids.*'=>'integer|distinct|exists:blogs,id',
         ];
     }
 

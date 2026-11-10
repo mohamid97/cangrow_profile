@@ -12,6 +12,8 @@ use App\Http\Requests\Api\Admin\Blog\BlogStoreRequest;
 use App\Http\Requests\Api\Admin\Blog\BlogUpdateRequest;
 use App\Http\Requests\Api\Admin\Branch\BranchStoreRequest;
 use App\Http\Requests\Api\Admin\Branch\BranchUpdateRequest;
+use App\Http\Requests\Api\Admin\Authorbox\AuthorboxStoreRequest;
+use App\Http\Requests\Api\Admin\Authorbox\AuthorboxUpdateRequest;
 use App\Http\Requests\Api\Admin\Brand\BrandStoreRequest;
 use App\Http\Requests\Api\Admin\Brand\BrandUpdateRequest;
 use App\Http\Requests\Api\Admin\Category\CategoryStoreRequest;
@@ -163,6 +165,10 @@ class ModelRequestFactory
             'brand'=>[
                 'store'  => BrandStoreRequest::class,
                 'update' => BrandUpdateRequest::class
+            ],
+            'authorbox'=>[
+                'store' => AuthorboxStoreRequest::class,
+                'update' => AuthorboxUpdateRequest::class
             ],
             'faq'=>[
                 'store'  => FaqStoreRequest::class,

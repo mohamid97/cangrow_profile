@@ -34,6 +34,7 @@ class ModelServiceFactory
         'mediaimage'=>\App\Services\Admin\Mediaimage\MediaimageService::class,
         'mediavideo'=>\App\Services\Admin\Mediavideo\MediavideoService::class,
         'brand'     => \App\Services\Admin\Brand\BrandService::class,
+        'authorbox' => \App\Services\Admin\Authorbox\AuthorboxService::class,
         'applicant'=> \App\Service\Admin\Applicant\ApplicantService::class,
         'faq'      =>  \App\Services\Admin\Faq\FaqService::class,
         'certificate'=> \App\Services\Admin\Certificate\CertificateService::class,

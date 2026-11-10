@@ -22,7 +22,12 @@ class FaqResource extends JsonResource
             'icon'=>$this->getImageUrl($this->icon),
             'topic'=>$this->topic,
             'question'=>$this->getColumnLang('question'),
-            'answer'=>$this->getColumnLang('answer')
+            'answer'=>$this->getColumnLang('answer'),
+            'blogs' => $this->whenLoaded('blogs', fn () => $this->getColumnsLangWithArrayRelation(
+                ['title', 'slug'],
+                'blogs',
+                ['blog_image']
+            )),
 
         ];
     }

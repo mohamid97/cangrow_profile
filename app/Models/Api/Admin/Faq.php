@@ -20,5 +20,10 @@ class Faq extends Model implements TranslatableContract
       return $date->format('Y-m-d'); 
     }
 
+    public function blogs()
+    {
+        return $this->belongsToMany(Blog::class, 'blog_faq')->withTimestamps();
+    }
+
     
 }
