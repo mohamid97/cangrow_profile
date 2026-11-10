@@ -26,21 +26,36 @@ class BlogResource extends JsonResource
             'blog_image' => $this->getImageUrl($this->blog_image),
             'breadcrumb' => $this->getImageUrl($this->breadcrumb),
             'category_id' => $this->category_id,
-            'category' => $this->whenLoaded('category' , function(){
-                    return [
-                        'id'=>$this->category ? $this->category->id : null,
-                        'title'=>$this->category ? $this->category->title : null,
-                        'slug' => $this->slug  ? $this->category->slug : null
-                    ];
-            }),
             'author' => $this->whenLoaded('author', function () {
-                return $this->author ? new AuthorboxResource($this->author) : null;
+                return [
+                    'id' => $this->author?->id,
+                    'author_name' => $this->getColumnLang('author_name', 'author'),
+                    'specialty' => $this->getColumnLang('specialty', 'author'),
+                    'bio' => $this->getColumnLang('bio', 'author'),
+                    'photo' => $this->getImageUrl($this->author?->photo),
+                    'profile_link' => $this->author?->profile_link,
+                ];
             }),
-            'faqs' => $this->whenLoaded('faqs', function () {
-                return FaqResource::collection($this->faqs);
+            'category' => $this->whenLoaded('category' , function(){
+                return [
+                    'id'=>$this->category ? $this->category->id : null,
+                    'title'=>$this->getColumnLang('title','category'),
+                    'slug' => $this->getColumnLang('slug','category')
+                ];
             }),
-            'related_blogs' => $this->whenLoaded('relatedBlogs', function () {
-                return BlogResource::collection($this->relatedBlogs);
+            'faqs' => $this->whenLoaded('faqs', function(){
+                
+                return $this->faqs->map(function($faq){
+                    return [
+                        'id' => $faq->id,
+                        'topic' => $faq->topic,
+                        'question' => $faq->getColumnLang('question'),
+                        'answer' => $faq->getColumnLang('answer'),
+                    ];
+                });
+            }),
+            'related_blogs'=> $this->whenLoaded('relatedBlogs', function(){
+                return $this->getColumnsLangWithArrayRelation(['title','slug'] , 'relatedBlogs', ['id','blog_image']);
             }),
             'meta_title' => $this->getColumnLang('meta_title'),
             'meta_des' => $this->getColumnLang('meta_des'),
@@ -51,4 +66,5 @@ class BlogResource extends JsonResource
             'updated_at' => $this->updated_at->format('Y-m-d'),
         ];
     }
+
 }
