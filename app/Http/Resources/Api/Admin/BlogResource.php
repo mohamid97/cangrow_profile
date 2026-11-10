@@ -26,6 +26,23 @@ class BlogResource extends JsonResource
             'blog_image' => $this->getImageUrl($this->blog_image),
             'breadcrumb' => $this->getImageUrl($this->breadcrumb),
             'category_id' => $this->category_id,
+            'author_box_id' => $this->author_box_id,
+            'author' => $this->whenLoaded('author', function () {
+                return $this->author ? new AuthorboxResource($this->author) : null;
+            }),
+            'faqs' => $this->whenLoaded('faqs', function () {
+                return FaqResource::collection($this->faqs);
+            }),
+            'related_blogs' => $this->whenLoaded('relatedBlogs', function () {
+                return $this->relatedBlogs->map(function ($blog) {
+                    return [
+                        'id' => $blog->id,
+                        'title' => $blog->getColumnLang('title'),
+                        'slug' => $blog->getColumnLang('slug'),
+                        'blog_image' => $this->getImageUrl($blog->blog_image),
+                    ];
+                });
+            }),
             'category' => $this->whenLoaded('category' , function(){
                     return [
                         'id'=>$this->category ? $this->category->id : null,

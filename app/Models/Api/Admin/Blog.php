@@ -10,7 +10,7 @@ use Astrotomic\Translatable\Translatable;
 class Blog extends Model implements TranslatableContract
 {
     use HasFactory , Translatable;
-    protected $fillable = ['blog_image','breadcrumb','is_active','category_id'];
+    protected $fillable = ['blog_image','breadcrumb','is_active','category_id','author_box_id'];
     public $translatedAttributes = ['title', 'des' , 'small_des' , 'meta_title', 'meta_des','title_image' , 'alt_image', 'slug'];
     public $translationForeignKey = 'blog_id';
     public $translationModel = 'App\Models\Api\Admin\BlogTranslation';
@@ -26,6 +26,20 @@ class Blog extends Model implements TranslatableContract
     public function category(){
         return $this->belongsTo(Category::class , 'category_id');
     }
-    
-    
+
+    public function faqs()
+    {
+        return $this->belongsToMany(Faq::class, 'blog_faq')->withTimestamps();
+    }
+
+    public function relatedBlogs()
+    {
+        return $this->belongsToMany(self::class, 'blog_related_blog', 'blog_id', 'related_blog_id')
+            ->withTimestamps();
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(Authorbox::class, 'author_box_id');
+    }
 }

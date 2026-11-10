@@ -8,6 +8,8 @@ use App\Http\Requests\Api\Admin\Achivement\AchivementStoreRequest;
 use App\Http\Requests\Api\Admin\Achivement\AchivementUpdateRequest;
 use App\Http\Requests\Api\Admin\Blog\BlogStoreRequest;
 use App\Http\Requests\Api\Admin\Blog\BlogUpdateRequest;
+use App\Http\Requests\Api\Admin\Authorbox\AuthorboxStoreRequest;
+use App\Http\Requests\Api\Admin\Authorbox\AuthorboxUpdateRequest;
 use App\Http\Requests\Api\Admin\Branch\BranchStoreRequest;
 use App\Http\Requests\Api\Admin\Branch\BranchUpdateRequest;
 use App\Http\Requests\Api\Admin\Brand\BrandStoreRequest;
@@ -56,7 +58,6 @@ use App\Http\Requests\Api\Admin\Mediaimage\MediavideoUpdateRequest;
 use App\Models\Api\Admin\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 
 class ModelRequestFactory
@@ -168,6 +169,10 @@ class ModelRequestFactory
                 'store'  => FaqStoreRequest::class,
                 'update' => FaqUpdateRequest::class 
             ],
+            'authorbox' => [
+                'store' => AuthorboxStoreRequest::class,
+                'update' => AuthorboxUpdateRequest::class,
+            ],
             'certificate'=>[
                 'store' => CertificateStoreRequest::class,
                 'update'=> CertificateUpdateRequest::class
@@ -200,12 +205,7 @@ class ModelRequestFactory
     
         $validator = Validator::make($request->all(), $requestClass->rules());
         
-        // if ($validator->fails()) {
-        //
-        //     throw new ValidationException($validator);
-        // }
-
-        
+        $validator->validate();
         
     }
 }
