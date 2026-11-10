@@ -70,8 +70,8 @@ class BlogService extends BaseModelService{
 
     private function syncRelatedBlogs(Blog $blog): void
     {
-        if (array_key_exists('related_blogs', $this->data)) {
-            $blog->relatedBlogs()->sync($this->data['related_blogs']);
+        if (array_key_exists('related_blog_ids', $this->data)) {
+            $blog->relatedBlogs()->sync($this->data['related_blog_ids']);
         }
     }
 
