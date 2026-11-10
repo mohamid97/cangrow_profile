@@ -28,6 +28,8 @@ class BlogStoreRequest extends FormRequest
         return [
             'category_id' => 'nullable|integer|exists:categories,id',
             'author_box_id' => 'nullable|integer|exists:authorboxes,id',
+            'faqs_ids' => 'nullable|array',
+            'faqs_ids.*' => 'integer|distinct|exists:faqs,id',
             'faq_ids' => 'nullable|array',
             'faq_ids.*' => 'integer|distinct|exists:faqs,id',
             'related_blog_ids' => 'nullable|array',

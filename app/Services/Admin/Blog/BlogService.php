@@ -68,7 +68,9 @@ class BlogService extends BaseModelService{
 
     private function syncRelations(Blog $blog): void
     {
-        if (array_key_exists('faq_ids', $this->data)) {
+        if (array_key_exists('faqs_ids', $this->data)) {
+            $blog->faqs()->sync($this->data['faqs_ids'] ?? []);
+        } elseif (array_key_exists('faq_ids', $this->data)) {
             $blog->faqs()->sync($this->data['faq_ids'] ?? []);
         }
 
