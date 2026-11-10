@@ -44,15 +44,7 @@ class BlogResource extends JsonResource
                 ];
             }),
             'faqs' => $this->whenLoaded('faqs', function(){
-                
-                return $this->faqs->map(function($faq){
-                    return [
-                        'id' => $faq->id,
-                        'topic' => $faq->topic,
-                        'question' => $this->getColumnLang('question'),
-                        'answer' => $this->getColumnLang('answer'),
-                    ];
-                });
+                return $this->getColumnsLangWithArrayRelation(['question','answer'] , 'faqs', ['topic' ]);
             }),
             'related_blogs'=> $this->whenLoaded('relatedBlogs', function(){
                 return $this->getColumnsLangWithArrayRelation(['title','slug'] , 'relatedBlogs', ['id','blog_image']);
