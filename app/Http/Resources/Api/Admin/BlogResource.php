@@ -49,8 +49,8 @@ class BlogResource extends JsonResource
                     return [
                         'id' => $faq->id,
                         'topic' => $faq->topic,
-                        'question' => $faq->getColumnLang('question'),
-                        'answer' => $faq->getColumnLang('answer'),
+                        'question' => $this->getColumnLang('question'),
+                        'answer' => $this->getColumnLang('answer'),
                     ];
                 });
             }),
