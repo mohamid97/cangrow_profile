@@ -33,6 +33,15 @@ class BlogResource extends JsonResource
                         'slug' => $this->slug  ? $this->category->slug : null
                     ];
             }),
+            'author' => $this->whenLoaded('author', function () {
+                return $this->author ? new AuthorboxResource($this->author) : null;
+            }),
+            'faqs' => $this->whenLoaded('faqs', function () {
+                return FaqResource::collection($this->faqs);
+            }),
+            'related_blogs' => $this->whenLoaded('relatedBlogs', function () {
+                return BlogResource::collection($this->relatedBlogs);
+            }),
             'meta_title' => $this->getColumnLang('meta_title'),
             'meta_des' => $this->getColumnLang('meta_des'),
             'alt_image' => $this->getColumnLang('alt_image'),

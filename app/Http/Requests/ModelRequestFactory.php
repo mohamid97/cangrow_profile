@@ -109,6 +109,10 @@ class ModelRequestFactory
                 'store'=> BlogStoreRequest::class,
                 'update'=> BlogUpdateRequest::class
             ],
+            'authorbox'=>[
+                'store'=> \App\Http\Requests\Api\Admin\Authorbox\AuthorboxStoreRequest::class,
+                'update'=> \App\Http\Requests\Api\Admin\Authorbox\AuthorboxUpdateRequest::class
+            ],
             'client'=>[
                 'store'=>ClientStoreRequest::class,
                 'update'=>ClientUpdateRequest::class
@@ -200,7 +204,7 @@ class ModelRequestFactory
     
         $validator = Validator::make($request->all(), $requestClass->rules());
         
-        if ($model === 'video' && $validator->fails()) {
+        if (in_array($model, ['video', 'blog', 'faq', 'authorbox'], true) && $validator->fails()) {
             throw new ValidationException($validator);
         }
 

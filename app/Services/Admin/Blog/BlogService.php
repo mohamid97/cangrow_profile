@@ -10,7 +10,7 @@ class BlogService extends BaseModelService{
     
     use StoreMultiLang , HandlesImage;
     protected string $modelClass = Blog::class;
-    protected array  $relations  = ['category'];
+    protected array  $relations  = ['category', 'author', 'faqs', 'relatedBlogs'];
 
 
 
@@ -30,7 +30,7 @@ class BlogService extends BaseModelService{
   
         $this->uploadSingleImage(['blog_image' , 'breadcrumb'] , 'uploads/blog');
         $this->data['slug']  = $this->createSlug($this->data);
-        $blog = parent::store($this->getBasicColumn(['breadcrumb' , 'image','category_id','is_active']));
+        $blog = parent::store($this->getBasicColumn(['breadcrumb', 'image', 'category_id', 'is_active', 'author_box_id']));
         if (!empty($this->data['updated_at'])) {
             $blog->timestamps = false;
     
@@ -41,7 +41,9 @@ class BlogService extends BaseModelService{
             $blog->timestamps = true;
        }
         $this->processTranslations($blog, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);  
-        return $blog;
+       $this->syncFaqs($blog);
+       $this->syncRelatedBlogs($blog);
+       return $blog->load($this->relations);
         
     }
     
@@ -49,7 +51,7 @@ class BlogService extends BaseModelService{
 
     public function update($id ){
         $this->uploadSingleImage(['blog_image' , 'breadcrumb'] , 'uploads/blog');
-        $blog = parent::update($id , $this->getBasicColumn(['breadcrumb' , 'image','category_id','is_active']));
+        $blog = parent::update($id , $this->getBasicColumn(['breadcrumb', 'image', 'category_id', 'is_active', 'author_box_id']));
         if (!empty($this->data['updated_at'])) {
             $blog->timestamps = false;
     
@@ -60,7 +62,9 @@ class BlogService extends BaseModelService{
             $blog->timestamps = true;
        }
         $this->processTranslations($blog, $this->data, ['title', 'slug' ,'des' , 'small_des' , 'meta_title' , 'meta_des', 'alt_image' , 'title_image']);
-        return $blog;
+       $this->syncFaqs($blog);
+       $this->syncRelatedBlogs($blog);
+       return $blog->load($this->relations);
         
     }
 
@@ -82,6 +86,19 @@ class BlogService extends BaseModelService{
         return $query->orderBy($orderBy, $direction);
     }
 
+    private function syncFaqs(Blog $blog): void
+    {
+        if (array_key_exists('faqs_ids', $this->data)) {
+            $blog->faqs()->sync($this->data['faqs_ids'] ?? []);
+        }
+    }
+
+    private function syncRelatedBlogs(Blog $blog): void
+    {
+        if (array_key_exists('related_blog_ids', $this->data)) {
+            $blog->relatedBlogs()->sync($this->data['related_blog_ids'] ?? []);
+        }
+    }
 
     
 

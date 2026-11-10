@@ -19,6 +19,7 @@ class ModelServiceFactory
         'role'=>\App\Services\Admin\Role\RoleService::class,
         'event'=>\App\Services\Admin\Event\EventService::class,
         'blog'=>\App\Services\Admin\Blog\BlogService::class,
+        'authorbox'=>\App\Services\Admin\Authorbox\AuthorboxService::class,
         'client'=>\App\Services\Admin\Client\ClientService::class,
         'ourwork'=>\App\Services\Admin\Ourwork\OurworkService::class,
         'feedback'=> \App\Services\Admin\Feedback\FeedbackService::class,
