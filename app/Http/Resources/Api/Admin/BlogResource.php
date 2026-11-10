@@ -30,25 +30,36 @@ class BlogResource extends JsonResource
             'author' => $this->whenLoaded('author', function () {
                 return $this->author ? new AuthorboxResource($this->author) : null;
             }),
-            'faqs' => $this->whenLoaded('faqs', function () {
-                return FaqResource::collection($this->faqs);
+            'category' => $this->whenLoaded('category' , function(){
+                return [
+                    'id'=>$this->category ? $this->category->id : null,
+                    'title'=>$this->getColumnLang('title','category'),
+                    'slug' => $this->getColumnLang('slug','category')
+                ];
             }),
-            'related_blogs' => $this->whenLoaded('relatedBlogs', function () {
-                return $this->relatedBlogs->map(function ($blog) {
+            'faqs' => $this->whenLoaded('faqs', function(){
+                
+                return $this->faqs->map(function($faq){
                     return [
-                        'id' => $blog->id,
-                        'title' => $blog->getColumnLang('title'),
-                        'slug' => $blog->getColumnLang('slug'),
-                        'blog_image' => $this->getImageUrl($blog->blog_image),
+                        'id' => $faq->id,
+                        'topic' => $faq->topic,
+                        'question' => $this->getColumnLang('question'),
+                        'answer' => $this->getColumnLang('answer'),
                     ];
                 });
             }),
-            'category' => $this->whenLoaded('category' , function(){
-                    return [
-                        'id'=>$this->category ? $this->category->id : null,
-                        'title'=>$this->category ? $this->category->title : null,
-                        'slug' => $this->slug  ? $this->category->slug : null
-                    ];
+            'related_blogs'=> $this->whenLoaded('relatedBlogs', function(){
+                return $this->getColumnsLangWithArrayRelation(['title','slug'] , 'relatedBlogs', ['id','blog_image']);
+            }),
+            'author' => $this->whenLoaded('author', function () {
+                return [
+                    'id' => $this->author?->id,
+                    'author_name' => $this->getColumnLang('author_name', 'author'),
+                    'specialty' => $this->getColumnLang('specialty', 'author'),
+                    'bio' => $this->getColumnLang('bio', 'author'),
+                    'photo' => $this->getImageUrl($this->author?->photo),
+                    'profile_link' => $this->author?->profile_link,
+                ];
             }),
             'meta_title' => $this->getColumnLang('meta_title'),
             'meta_des' => $this->getColumnLang('meta_des'),
