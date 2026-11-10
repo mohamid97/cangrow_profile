@@ -42,4 +42,5 @@ class Blog extends Model implements TranslatableContract
     {
         return $this->belongsTo(Authorbox::class, 'author_box_id');
     }
+    
 }

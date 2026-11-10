@@ -99,6 +99,9 @@ Route::prefix('v1')->middleware('ckeckLang')->group(function () {
         // get brands with category id
         Route::post('category/brands' ,"CategoryController@getBrand");
 
+        // get FAQs with blog id
+        Route::post('blog/faqs', 'BlogController@getFaqs');
+
         // home page 
     Route::get('/home' ,'HomeController@index'); 
     
