@@ -23,9 +23,9 @@ class MessageController extends Controller
 
         try{
             DB::beginTransaction();
-            if(!$this->validateRecaptcha($request->recaptcha_token)){
-                return $this->error( __('invalid_recaptcha') , 422);
-            }
+            // if(!$this->validateRecaptcha($request->recaptcha_token)){
+            //     return $this->error( __('invalid_recaptcha') , 422);
+            // }
             $message = Message::create($request->all());
             Mail::to(config('mail.from.address'))->send(new ContactMail($message));
             DB::commit();
