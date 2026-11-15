@@ -34,6 +34,7 @@ class MessageRequest extends FormRequest
             ],
             'subject' => 'nullable|string|max:255',
             'message' => 'nullable|string|max:5000',
+            'product_type' => 'nullable|string|max:255',
             'recaptcha_token' => 'required',
         ];
     }
